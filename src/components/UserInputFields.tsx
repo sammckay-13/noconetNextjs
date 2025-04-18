@@ -37,6 +37,12 @@ export default function UserInputFields() {
         if (!selectedUser) return;
         nameField.value = selectedUser.name;
         emailField.value = selectedUser.email;
+        setUser({
+            ...user,
+            name: nameField.value,
+            email: emailField.value,
+            phoneNumber: selectedUser.phoneNumber,
+        });
     }, [selectedUser])
 
     const handleNameChange = (event: any) => {

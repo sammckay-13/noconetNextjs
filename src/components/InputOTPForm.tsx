@@ -22,6 +22,8 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 
+import { useEffect } from "react"
+
 const FormSchema = z.object({
   phonenumber: z.string().min(10, {
     message: "Your phonenumber must be 10 numbers.",
@@ -39,10 +41,9 @@ export function InputOTPForm(member: User) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      phonenumber: member.phoneNumber,
+      phonenumber: "",
     },
   })
-
   async function onSubmit(data: z.infer<typeof FormSchema>) {
         const response = await fetch("/api/users", {
             method: "POST",
@@ -59,6 +60,13 @@ export function InputOTPForm(member: User) {
         }
   }
 
+
+    useEffect(() => {
+    if (member.phoneNumber) {
+      form.setValue("phonenumber", member.phoneNumber)
+    }
+  }, [member.phoneNumber])
+  //^ I want to have a modal or something that pops up when the user submits the form and says "Thank you for signing in with NocoNet!"
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
