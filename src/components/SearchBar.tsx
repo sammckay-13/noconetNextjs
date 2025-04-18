@@ -1,6 +1,5 @@
 'use client'
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
+import { useEffect, useState } from "react"
 import {
   Command,
   CommandInput,
@@ -8,31 +7,47 @@ import {
   CommandEmpty,
   CommandItem,
 } from "@/components/ui/command"
+import { useUserContext } from "@/components/UserContext";
 
-const options = [
-  "Apple",
-  "Banana",
-  "Cherry",
-  "Date",
-  "Elderberry",
-  "Fig",
-  "Grape",
-  "Honeydew",
-]
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+}
 
 export default function SearchBar() {
   const [search, setSearch] = useState("")
   const [selected, setSelected] = useState("")
+  const [userNames, setUserNames] = useState<string[]>([])
+  const [users, setUsers] = useState<User[]>([])
+  const {setSelectedUser} = useUserContext()
 
-  const filtered = options.filter((item) =>
-    item.toLowerCase().includes(search.toLowerCase())
-  )
+  useEffect(() => {
+  const fetchUsers = async () => {
+    const response = await fetch("/api/users", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json()
+    const members = data.map((member: any) => member.name)
+    setUserNames(members)
+    setUsers(data)
+  }
+  fetchUsers()
+}, [])
+
+const filtered = users.filter((user: User) =>
+  user.name?.toLowerCase().includes(search.toLowerCase())
+)
 
   return (
     <div className="w-full max-w-2xl">
       <Command>
         <CommandInput
-          placeholder="Search for a fruit..."
+          placeholder="Search your name..."
           value={search}
           onValueChange={setSearch}
         />
@@ -41,16 +56,17 @@ export default function SearchBar() {
             <CommandEmpty>No results found.</CommandEmpty>
           )} 
           {filtered.length > 0 &&  search.length > 0 && (
-            filtered.map((item, index) => (
+            filtered.map((user, index) => (
               <CommandItem
                 key={index}
-                value={item}
+                value={user.name}
                 onSelect={(value) => {
+                  setSelectedUser(user)
                   setSelected(value)
-                  setSearch(value)
+                  setSearch("")
                 }}
               >
-                {item}
+                {user.name}
               </CommandItem>
             ))
           )}
