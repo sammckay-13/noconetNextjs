@@ -2,9 +2,11 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import SearchBar from "@/components/SearchBar";
 import UserInputFields from "@/components/UserInputFields";
+import { UserProvider } from "@/components/UserContext";
 
 export default function Home() {
   return (
+    <UserProvider>
     <div className="flex flex-col items-center justify-center mt-20">
       <Card className=" flex w-250 h-250 items-center">
         <CardHeader className="flex items-center justify-center w-full">
@@ -18,5 +20,6 @@ export default function Home() {
           </div>
       </Card>
     </div>
+    </UserProvider>
   );
 }
