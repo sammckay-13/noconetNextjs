@@ -2,7 +2,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type User = {
-    id: string;
     name: string;
     email: string;
     phoneNumber: string;
