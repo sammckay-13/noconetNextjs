@@ -102,7 +102,7 @@ export function InputOTPForm({member, handleReset}: InputOTPFormProps) {
           control={form.control}
           name="phonenumber"
           render={({ field }) => (
-            <FormItem className="w-auto items-center justify-center">
+            <FormItem className="w-auto items-center justify-center text-white">
               <FormControl>
                 <InputOTP maxLength={10} {...field}>
                   <InputOTPGroup>
@@ -128,7 +128,7 @@ export function InputOTPForm({member, handleReset}: InputOTPFormProps) {
           )}
         />
         <div className="flex items-center justify-center w-full mt-6">
-        <Button className="hover:bg-green-800 cursor-pointer" type="submit">Submit</Button>
+        <Button className="hover:bg-teal-600 cursor-pointer bg-[#27BDC7]" type="submit">Submit</Button>
         </div>
 
 

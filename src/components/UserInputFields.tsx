@@ -25,7 +25,7 @@ export default function UserInputFields() {
         mostrecentsignin: new Date(),
     });
     const {selectedUser} = useUserContext()
-    const [isValidEmail, setIsValidEmail] = useState(false);
+    const [isValidEmail, setIsValidEmail] = useState(true);
     
     useEffect(() => {
         const nameField = document.getElementById("nameField") as HTMLInputElement;
@@ -74,10 +74,10 @@ export default function UserInputFields() {
   return (
     <div className="w-full max-w-sm">
             <div className="w-full flex items-center justify-between mb-8">
-                <Input onChange={handleNameChange} id="nameField" type="text" placeholder="John Doe" className={"mr-5"} />
-                <Input onChange={handleEmailChange} id="emailField" type="email" placeholder="example@example.com" className={isValidEmail ? "w-auto" : "border-red-500"} />
+                <Input onChange={handleNameChange} id="nameField" type="text" placeholder="Enter your name..." className="mr-5 text-white !placeholder-white" />
+                <Input onChange={handleEmailChange} id="emailField" type="email" placeholder="Enter your email..." className={isValidEmail ? " !placeholder-white text-white" : " border-red-500 text-white !placeholder-red-500"} />
             </div>
-            <label className="block items-center justify-center text-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <label className="block items-center justify-center text-center text-sm font-medium text-white dark:text-gray-300 mb-3">
                 Enter your phone number below:
             </label>
         <div className="flex items-center justify-center w-auto">
