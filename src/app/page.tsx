@@ -7,12 +7,12 @@ import { UserProvider } from "@/components/UserContext";
 export default function Home() {
   return (
     <UserProvider>
-    <div className="flex flex-col items-center justify-center mt-20">
-      <Card className=" flex w-250 h-250 items-center">
+    <div className="flex justify-center mt-20">
+      <Card className=" flex sm:w-150 md:h-150 md:w-200 sm:h-150 items-center md:justify-center">
         <CardHeader className="flex items-center justify-center w-full">
           <CardTitle className="text-2xl">Sign in for NocoNet!</CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center justify-center w-100 mt-10">
+        <CardContent className="flex items-center justify-center w-100">
           <SearchBar></SearchBar>
         </CardContent>
           <div className="flex">

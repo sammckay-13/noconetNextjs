@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { useUserContext } from "./UserContext"
 
+
   type User = {
     name: string;
     email: string;
@@ -79,7 +80,7 @@ export default function UserInputFields() {
             <label className="block items-center justify-center text-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                 Enter your phone number below:
             </label>
-        <div className="flex items-center justify-center w-full">
+        <div className="flex items-center justify-center w-auto">
             <InputOTPForm member={user} handleReset={handleReset} />
         </div>
     </div>

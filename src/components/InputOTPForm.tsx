@@ -110,13 +110,11 @@ export function InputOTPForm({member, handleReset}: InputOTPFormProps) {
                     <InputOTPSlot index={1} />
                     <InputOTPSlot index={2} />
                   </InputOTPGroup>
-                  <InputOTPSeparator></InputOTPSeparator>
                   <InputOTPGroup>
                     <InputOTPSlot index={3} />
                     <InputOTPSlot index={4} />
                     <InputOTPSlot index={5} />
                   </InputOTPGroup>
-                  <InputOTPSeparator></InputOTPSeparator>
                   <InputOTPGroup>
                     <InputOTPSlot index={6} />
                     <InputOTPSlot index={7} />
