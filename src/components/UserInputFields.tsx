@@ -6,21 +6,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { useUserContext } from "./UserContext"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-  } from "@/components/ui/form"
 
   type User = {
     name: string;
     email: string;
     phoneNumber: string;
+    mostrecentsignin: Date;
   }
+  
 
 export default function UserInputFields() {
     
@@ -28,8 +21,10 @@ export default function UserInputFields() {
         name: "",
         email: "",
         phoneNumber: "",
+        mostrecentsignin: new Date(),
     });
     const {selectedUser} = useUserContext()
+    const [isValidEmail, setIsValidEmail] = useState(false);
     
     useEffect(() => {
         const nameField = document.getElementById("nameField") as HTMLInputElement;
@@ -53,23 +48,39 @@ export default function UserInputFields() {
     }
 
     const handleEmailChange = (event: any) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setIsValidEmail(emailRegex.test(event.target.value));
         setUser({
             ...user,
             email: event.target.value,
         });
     }
 
+    function handleReset() {
+        setUser({
+            name: "",
+            email: "",
+            phoneNumber: "",
+            mostrecentsignin: new Date(),
+        });
+        const nameField = document.getElementById("nameField") as HTMLInputElement;
+        const emailField = document.getElementById("emailField") as HTMLInputElement;
+        if (!selectedUser) return;
+        nameField.value = "";
+        emailField.value = "";
+    }
+
   return (
     <div className="w-full max-w-sm">
             <div className="w-full flex items-center justify-between mb-8">
-                <Input onChange={handleNameChange} id="nameField" type="text" placeholder="Enter your name" className="inline w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                <Input onChange={handleEmailChange} id="emailField" type="email" placeholder="Enter your email" className="inline w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                <Input onChange={handleNameChange} id="nameField" type="text" placeholder="John Doe" className={"mr-5"} />
+                <Input onChange={handleEmailChange} id="emailField" type="email" placeholder="example@example.com" className={isValidEmail ? "w-auto" : "border-red-500"} />
             </div>
             <label className="block items-center justify-center text-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                 Enter your phone number below:
             </label>
         <div className="flex items-center justify-center w-full">
-            <InputOTPForm {...user} />
+            <InputOTPForm member={user} handleReset={handleReset} />
         </div>
     </div>
   )
