@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { set, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { toast } from "sonner"
@@ -21,8 +21,17 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 const FormSchema = z.object({
   phonenumber: z.string().min(10, {
@@ -35,9 +44,19 @@ type User = {
     name: string;
     email: string;
     phoneNumber: string;
+    mostrecentsignin: Date;
   }
 
-export function InputOTPForm(member: User) {
+  type InputOTPFormProps = {
+    member: User;
+    handleReset: () => void;
+  }
+
+
+export function InputOTPForm({member, handleReset}: InputOTPFormProps) {
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false)
+  const [showFailureDialog, setShowFailureDialog] = useState(false)
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,12 +64,15 @@ export function InputOTPForm(member: User) {
     },
   })
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    //I need to check if the user is already in the database, if they are just update the most recent sign in date
+    if (member.name.length > 0 && member.email.length > 0) {
         const response = await fetch("/api/users", {
             method: "POST",
             body: JSON.stringify({
                 name: member.name,
                 email: member.email,
                 phoneNumber: data.phonenumber,
+                mostrecentsignin: member.mostrecentsignin
             }),
         });
         if (response.ok) {
@@ -58,7 +80,14 @@ export function InputOTPForm(member: User) {
         } else {
             toast.error("Error adding user")
         }
-  }
+        setShowSuccessDialog(true)
+        form.reset()
+        handleReset()
+      } else {
+        setShowFailureDialog(true)
+      }
+    }
+        
 
 
     useEffect(() => {
@@ -66,7 +95,6 @@ export function InputOTPForm(member: User) {
       form.setValue("phonenumber", member.phoneNumber)
     }
   }, [member.phoneNumber])
-  //^ I want to have a modal or something that pops up when the user submits the form and says "Thank you for signing in with NocoNet!"
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -74,7 +102,7 @@ export function InputOTPForm(member: User) {
           control={form.control}
           name="phonenumber"
           render={({ field }) => (
-            <FormItem className="w-full items-center justify-center ml-5">
+            <FormItem className="w-auto items-center justify-center">
               <FormControl>
                 <InputOTP maxLength={10} {...field}>
                   <InputOTPGroup>
@@ -103,8 +131,37 @@ export function InputOTPForm(member: User) {
         />
         <div className="flex items-center justify-center w-full mt-6">
         <Button className="hover:bg-green-800 cursor-pointer" type="submit">Submit</Button>
-
         </div>
+
+
+        <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+          <DialogContent className="sm:max-w-[425px] items-center justify-center">
+            <DialogHeader>
+              <DialogTitle>Success!</DialogTitle>
+              <DialogDescription>
+              You have successfully signed in with NocoNet today!
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button onClick={() => setShowSuccessDialog(false)} type="submit" className="cursor-pointer">Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+
+        <Dialog open={showFailureDialog} onOpenChange={setShowFailureDialog}>
+          <DialogContent className="sm:max-w-[425px] items-center justify-center">
+            <DialogHeader>
+              <DialogTitle>Oops!</DialogTitle>
+              <DialogDescription>
+              Make sure you have something in the username, email, and phone number fields!
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button onClick={() => setShowFailureDialog(false)} type="submit" className="cursor-pointer">Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </form>
     </Form>
   )
