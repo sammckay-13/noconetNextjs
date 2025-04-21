@@ -5,4 +5,5 @@ export const users = pgTable("nocomembers", {
   name: text("name").notNull(),
   email: text("email"),
   phoneNumber: text("phonenumber"),
+  mostrecentsignin: text("mostrecentsignin"),
 });
