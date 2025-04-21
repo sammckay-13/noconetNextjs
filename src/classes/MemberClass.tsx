@@ -1,41 +1,48 @@
 export class Member {
-    private _name: string;
-    private _email: string;
-    private _phoneNumber: string;
-
-    constructor(name: string, email: string, phoneNumber: string) {
-        this._name = name;
-        this._email = email;
-        this._phoneNumber = phoneNumber;
-    }
-
+    constructor(
+      private _name: string,
+      private _email: string,
+      private _phoneNumber: string,
+      private _mostRecentSignIn: Date
+    ) {}
+  
     get name(): string {
-        return this._name;
+      return this._name;
     }
-
+  
+    set name(value: string) {
+      this._name = value;
+    }
+  
     get email(): string {
-        return this._email;
+      return this._email;
     }
-
+  
+    set email(value: string) {
+      this._email = value;
+    }
+  
     get phoneNumber(): string {
-        return this._phoneNumber;
+      return this._phoneNumber;
     }
-
-    set name(newName: string) {
-        this._name = newName;
+  
+    set phoneNumber(value: string) {
+      this._phoneNumber = value;
     }
-
-    set email(newEmail: string) {
-        this._email = newEmail;
+  
+    get mostRecentSignIn(): Date {
+      return this._mostRecentSignIn;
     }
-
-    set phoneNumber(newPhoneNumber: string) {
-        this._phoneNumber = newPhoneNumber;
+  
+    set mostRecentSignIn(value: Date) {
+      this._mostRecentSignIn = value;
     }
-
-    set clear(newVal: Member) {
-        this._name = newVal.name;
-        this._email = newVal.email;
-        this._phoneNumber = newVal.phoneNumber;
+  
+    set updateFrom(member: Member) {
+      this._name = member.name;
+      this._email = member.email;
+      this._phoneNumber = member.phoneNumber;
+      this._mostRecentSignIn = member.mostRecentSignIn;
     }
-}
+  }
+  
