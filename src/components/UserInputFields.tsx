@@ -66,9 +66,9 @@ export default function UserInputFields() {
         });
         const nameField = document.getElementById("nameField") as HTMLInputElement;
         const emailField = document.getElementById("emailField") as HTMLInputElement;
-        if (!selectedUser) return;
         nameField.value = "";
         emailField.value = "";
+        if (!selectedUser) return;
     }
 
   return (
